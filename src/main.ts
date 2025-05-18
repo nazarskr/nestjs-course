@@ -1,12 +1,22 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { ValidationPipe } from '@nestjs/common';
+import { useContainer as useValidatorContainer } from 'class-validator';
+import { AppConfigService } from '@core/config/app-config.service';
+import { AppValidationPipe } from '@core/validation/app-validation.pipe';
+import cookieSession from 'cookie-session';
 
 async function bootstrap(): Promise<string | number> {
   const app = await NestFactory.create(AppModule);
-  app.useGlobalPipes(new ValidationPipe());
+  const appConfigService = app.get(AppConfigService);
+  app.use(
+    cookieSession({
+      keys: [appConfigService.cookieSessionKey],
+    }),
+  );
+  useValidatorContainer(app.select(AppModule), { fallbackOnErrors: true });
+  app.useGlobalPipes(new AppValidationPipe(appConfigService));
 
-  const port: string | number = process.env.PORT ?? 3000;
+  const port = appConfigService.port ?? 3000;
   await app.listen(port);
   return port;
 }

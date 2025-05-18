@@ -6,8 +6,8 @@ import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
   {
-    // ignores: ['eslint.config.mjs'],
-    ignores: "*",
+    ignores: ['eslint.config.mjs'],
+    // ignores: "*",
   },
   eslint.configs.recommended,
   ...tseslint.configs.recommendedTypeChecked,
