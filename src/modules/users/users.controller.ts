@@ -10,6 +10,8 @@ import {
   NotFoundException,
   Session,
   UseGuards,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UsersService } from './users.service';
@@ -31,12 +33,6 @@ export class UsersController {
     private authService: AuthService,
   ) {}
 
-  // @Get('/whoami')
-  // whoAmi(@Session() session: ISession) {
-  //   if (!session || !session.userId) return null;
-  //   return this.usersService.findOne(session.userId);
-  // }
-
   @Get('/whoami')
   @UseGuards(AuthGuard)
   whoAmi(@CurrentUser() user: User) {
@@ -44,6 +40,7 @@ export class UsersController {
   }
 
   @Post('/signout')
+  @HttpCode(HttpStatus.OK)
   signout(@Session() session: ISession) {
     session.userId = undefined;
   }

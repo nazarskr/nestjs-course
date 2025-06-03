@@ -10,11 +10,20 @@ async function bootstrap(): Promise<string | number> {
   const appConfigService = app.get(AppConfigService);
   app.use(
     cookieSession({
+      name: 'test-session',
       keys: [appConfigService.cookieSessionKey],
+      maxAge: 60 * 1000,
+      httpOnly: true,
+      secure: appConfigService.isProduction,
+      sameSite: appConfigService.sameSite,
     }),
   );
   useValidatorContainer(app.select(AppModule), { fallbackOnErrors: true });
   app.useGlobalPipes(new AppValidationPipe(appConfigService));
+  app.enableCors({
+    origin: appConfigService.clientUrl,
+    credentials: true,
+  });
 
   const port = appConfigService.port ?? 3000;
   await app.listen(port);

@@ -20,4 +20,12 @@ export class AppConfigService {
   get isProduction(): boolean {
     return this.nodeEnv === 'production';
   }
+
+  get clientUrl(): string {
+    return this.configService.get<string>('CLIENT_URL', 'default');
+  }
+
+  get sameSite(): boolean | 'strict' | 'lax' | 'none' | undefined {
+    return this.isProduction ? 'none' : 'lax';
+  }
 }
