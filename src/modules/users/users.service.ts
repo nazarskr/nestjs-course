@@ -6,9 +6,7 @@ import { UpdateUserDto } from '@modules/users/dtos/update-user.dto';
 
 @Injectable()
 export class UsersService {
-  constructor(
-    @InjectRepository(User) private repo: Repository<User>,
-  ) {}
+  constructor(@InjectRepository(User) private repo: Repository<User>) {}
 
   create(email: string, password: string): Promise<User> {
     const user = this.repo.create({ email, password });

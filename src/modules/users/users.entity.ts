@@ -6,8 +6,10 @@ import {
   Column,
   PrimaryGeneratedColumn,
   Unique,
+  OneToMany,
 } from 'typeorm';
 import { AppLogger } from '@core/logger/app-logger';
+import { Report } from '@modules/reports/reports.entity';
 
 @Entity()
 @Unique(['email'])
@@ -21,6 +23,9 @@ export class User {
 
   @Column()
   password: string;
+
+  @OneToMany(() => Report, (report) => report.user)
+  reports: Report[];
 
   @AfterInsert()
   logInsert() {
