@@ -1,9 +1,9 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
-import { RequestWithSession } from '../interfaces/session';
+import { Request } from 'express';
 
 export const CurrentUser = createParamDecorator(
   (data: never, context: ExecutionContext) => {
-    const request = context.switchToHttp().getRequest<RequestWithSession>();
+    const request: Request = context.switchToHttp().getRequest();
     return request.currentUser;
   },
 );
